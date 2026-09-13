@@ -1,0 +1,26 @@
+info:
+  name: Get Alertas
+  type: http
+  seq: 7
+
+http:
+  method: get
+  url: http://localhost:8080/api/v1/alertas?page=0&size=10&sort=criacao%2Cdesc
+  params:
+    - name: page
+      value: "0"
+      type: query
+    - name: size
+      value: "10"
+      type: query
+    - name: sort
+      value: criacao%2Cdesc
+      type: query
+  auth: inherit
+
+settings:
+  encodeUrl: false
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
