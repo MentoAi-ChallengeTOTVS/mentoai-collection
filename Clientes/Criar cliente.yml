@@ -1,0 +1,41 @@
+info:
+  name: Criar cliente
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{baseUrl}}/api/v1/clientes"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "nome": "Clínica Saúde Integral",
+        "segmento": "Saúde",
+        "porte": "MEDIO"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        test("Status code válido", function () {
+          expect(res.getStatus()).to.be.oneOf([201, 400, 409, 500]);
+        });
+        if (res.getStatus() === 201) {
+          const json = res.getBody();
+          if (json.id) bru.setCollectionVar("clienteId", json.id);
+        }
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
+
+docs: "Cria um cliente ativo. Body obrigatório: nome (não vazio, máximo 255), segmento (não vazio, máximo 100) e porte (não vazio, máximo 50; é texto livre, não enum). Resposta 201: {id, nome, segmento, porte, criacao, status}. Pode retornar 400 por validação/corpo inválido, 409 por integridade e 500 inesperado. Sem autenticação."

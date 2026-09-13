@@ -1,0 +1,23 @@
+info:
+  name: Listar todas as reuniões
+  type: http
+  seq: 2
+
+http:
+  method: GET
+  url: "{{baseUrl}}/api/v1/reunioes"
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: test("Status code válido", function () { expect(res.getStatus()).to.be.oneOf([200, 500]); });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
+
+docs: "Lista todas as reuniões; cada item transporta clienteId. Resposta 200: array de {id, dataReuniao, duracaoMinutos, clienteId, usuarioId, criacao}. Pode retornar 500 inesperado. Sem autenticação."

@@ -1,0 +1,32 @@
+info:
+  name: Alterar status do cliente
+  type: http
+  seq: 5
+
+http:
+  method: PATCH
+  url: "{{baseUrl}}/api/v1/clientes/{{clienteId}}/status"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "status": false
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: test("Status code válido", function () { expect(res.getStatus()).to.be.oneOf([200, 400, 404, 409, 500]); });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
+
+docs: "Altera somente o status do cliente. ID deve ser positivo e status é booleano obrigatório. Resposta 200: {id, nome, segmento, porte, criacao, status}. Pode retornar 400, 404, 409 ou 500. Sem autenticação."

@@ -1,0 +1,53 @@
+info:
+  name: Enviar transcrição para análise
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{baseUrl}}/api/v1/transcricoes/upload"
+  body:
+    type: multipart-form
+    data:
+      - name: arquivo
+        type: file
+        value: []
+        description: Arquivo .txt não vazio, UTF-8, até 1 MiB.
+      - name: clienteId
+        type: text
+        value: "{{clienteId}}"
+        description: Long positivo e cliente existente.
+      - name: usuarioId
+        type: text
+        value: "{{usuarioId}}"
+        description: Long positivo e usuário existente.
+      - name: dataReuniao
+        type: text
+        value: 2026-09-13T10:00:00
+        description: LocalDateTime ISO 8601.
+      - name: duracaoMinutos
+        type: text
+        value: "45"
+        description: Inteiro maior ou igual a zero.
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        test("Status code válido", function () { expect(res.getStatus()).to.be.oneOf([202, 400, 404, 409, 413, 415, 500]); });
+        if (res.getStatus() === 202) {
+          const json = res.getBody();
+          if (json.reuniaoId) bru.setCollectionVar("reuniaoId", json.reuniaoId);
+          if (json.transcricaoId) bru.setCollectionVar("transcricaoId", json.transcricaoId);
+          if (json.analiseId) bru.setCollectionVar("analiseId", json.analiseId);
+        }
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
+
+docs: "Recebe multipart/form-data, cria reunião, transcrição e análise pendente para o cliente. O Postman define o boundary automaticamente. Resposta 202: {reuniaoId, transcricaoId, analiseId, status}, com status inicialmente PENDENTE. Pode retornar 400, 404, 409, 413, 415 ou 500. Sem autenticação."

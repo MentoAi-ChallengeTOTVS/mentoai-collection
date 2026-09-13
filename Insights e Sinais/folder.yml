@@ -1,0 +1,11 @@
+info:
+  name: Insights e Sinais
+  type: folder
+  seq: 2
+
+request:
+  auth: inherit
+
+docs:
+  content: Análises de reuniões de clientes. Não há endpoint de insights, riscos, oportunidades ou sinais filtrado diretamente por cliente.
+  type: text/markdown

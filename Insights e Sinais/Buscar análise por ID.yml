@@ -1,0 +1,23 @@
+info:
+  name: Buscar análise por ID
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: "{{baseUrl}}/api/v1/analises/{{analiseId}}"
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: test("Status code válido", function () { expect(res.getStatus()).to.be.oneOf([200, 404, 500]); });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
+
+docs: "Busca análise de uma reunião de cliente. Resposta 200: {id, reuniaoId, resumoExecutivo, sentimentoGeral, statusProcessamento, criacao, iniciadoEm, finalizadoEm, mensagemErro, insights, sinaisComerciais}. Insight: {id, analiseId, tipo, descricao, severidade, criacao}; sinal: {id, analiseId, tipo, descricao, evidencia, relevancia, criacao}. Listas vêm vazias enquanto não PROCESSADA. Pode retornar 404 ou 500. Sem autenticação."

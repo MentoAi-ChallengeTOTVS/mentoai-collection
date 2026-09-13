@@ -1,0 +1,11 @@
+info:
+  name: Reuniões do Cliente
+  type: folder
+  seq: 1
+
+request:
+  auth: inherit
+
+docs:
+  content: Rotas que retornam o identificador do cliente associado a reuniões.
+  type: text/markdown

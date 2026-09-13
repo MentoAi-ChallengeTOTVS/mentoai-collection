@@ -1,0 +1,23 @@
+info:
+  name: Listar transcrições
+  type: http
+  seq: 2
+
+http:
+  method: GET
+  url: "{{baseUrl}}/api/v1/transcricoes"
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: test("Status code válido", function () { expect(res.getStatus()).to.be.oneOf([200, 500]); });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
+
+docs: "Lista transcrições; a associação ao cliente é indireta por reuniaoId. Resposta 200: array de {id, conteudo, nomeArquivo, formatoArquivo, idioma, reuniaoId, criacao}. Pode retornar 500. Sem autenticação."

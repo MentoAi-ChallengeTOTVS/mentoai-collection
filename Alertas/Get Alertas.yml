@@ -1,25 +1,25 @@
 info:
-  name: Get Usuários Paginado
+  name: Get Alertas
   type: http
-  seq: 3
+  seq: 4
 
 http:
-  method: GET
-  url: http://localhost:8080/api/v1/usuarios?page=0&size=5&sort=nome,asc
+  method: get
+  url: http://localhost:8080/api/v1/alertas?page=0&size=10&sort=criacao%2Cdesc
   params:
     - name: page
       value: "0"
       type: query
     - name: size
-      value: "5"
+      value: "10"
       type: query
     - name: sort
-      value: nome,asc
+      value: criacao%2Cdesc
       type: query
   auth: inherit
 
 settings:
-  encodeUrl: true
+  encodeUrl: false
   timeout: 0
   followRedirects: true
   maxRedirects: 5

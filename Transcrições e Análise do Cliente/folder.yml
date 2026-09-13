@@ -1,0 +1,11 @@
+info:
+  name: Transcrições e Análise do Cliente
+  type: folder
+  seq: 1
+
+request:
+  auth: inherit
+
+docs:
+  content: Upload que consome clienteId e consultas de transcrição vinculadas a reuniões do cliente.
+  type: text/markdown

@@ -1,7 +1,7 @@
 info:
   name: PATCH - Marcar Alerta como Lido
   type: http
-  seq: 9
+  seq: 4
 
 http:
   method: patch

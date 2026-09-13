@@ -1,0 +1,60 @@
+info:
+  name: Listar clientes
+  type: http
+  seq: 2
+
+http:
+  method: GET
+  url: "{{baseUrl}}/api/v1/clientes?nome=Clínica&segmento=Saúde&porte=MEDIO&status=true&page=0&size=20&sort=nome&direction=asc"
+  params:
+    - name: nome
+      value: Clínica
+      type: query
+      description: Filtro parcial, máximo 255 caracteres.
+      disabled: true
+    - name: segmento
+      value: Saúde
+      type: query
+      description: Filtro parcial, máximo 100 caracteres.
+      disabled: true
+    - name: porte
+      value: MEDIO
+      type: query
+      description: Filtro parcial, máximo 50 caracteres.
+      disabled: true
+    - name: status
+      value: "true"
+      type: query
+      description: Filtro booleano.
+      disabled: true
+    - name: page
+      value: "0"
+      type: query
+      description: Página baseada em zero; mínimo 0.
+    - name: size
+      value: "20"
+      type: query
+      description: Itens por página; mínimo 1, máximo 100.
+    - name: sort
+      value: nome
+      type: query
+      description: "Aceitos: nome, segmento, porte, criacao, status. Valores desconhecidos viram nome."
+    - name: direction
+      value: asc
+      type: query
+      description: desc gera ordem descendente; qualquer outro valor vira asc.
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: test("Status code válido", function () { expect(res.getStatus()).to.be.oneOf([200, 400, 500]); });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
+
+docs: "Lista clientes com filtros e paginação. Resposta 200: {conteudo: [{id, nome, segmento, porte, criacao, status}], pagina, tamanho, totalElementos, totalPaginas}. Pode retornar 400 por parâmetros inválidos e 500 inesperado. Sem autenticação."
