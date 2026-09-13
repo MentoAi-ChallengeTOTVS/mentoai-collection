@@ -9,6 +9,9 @@ http:
   auth: inherit
 
 runtime:
+  variables:
+    - name: baseUrl
+      value: localhost:8080
   scripts:
     - type: after-response
       code: test("Status code válido", function () { expect(res.getStatus()).to.be.oneOf([200, 404, 500]); });

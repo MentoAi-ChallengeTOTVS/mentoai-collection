@@ -13,6 +13,21 @@ config:
         username: ""
         password: ""
       bypassProxy: ""
+
+request:
+  variables:
+    - name: reuniaoId
+      value:
+        type: number
+        data: "18"
+    - name: transcricaoId
+      value:
+        type: number
+        data: "18"
+    - name: analiseId
+      value:
+        type: number
+        data: "18"
 bundled: false
 extensions:
   bruno:

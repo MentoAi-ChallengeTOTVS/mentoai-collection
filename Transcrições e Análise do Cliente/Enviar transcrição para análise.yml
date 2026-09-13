@@ -11,7 +11,9 @@ http:
     data:
       - name: arquivo
         type: file
-        value: []
+        value:
+          - /home/coutinho/Downloads/mentoai_transcricao_teste.txt
+        contentType: text/plain; charset=utf-8
         description: Arquivo .txt não vazio, UTF-8, até 1 MiB.
       - name: clienteId
         type: text
@@ -32,6 +34,13 @@ http:
   auth: inherit
 
 runtime:
+  variables:
+    - name: clienteId
+      value: "1"
+    - name: usuarioId
+      value: "1"
+    - name: baseUrl
+      value: localhost:8080
   scripts:
     - type: after-response
       code: |-
