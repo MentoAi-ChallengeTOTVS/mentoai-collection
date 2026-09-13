@@ -1,0 +1,244 @@
+info:
+  name: teste-gemini
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: https://generativelanguage.googleapis.com/v1beta/interactions
+  headers:
+    - name: Content-Type
+      value: application/json
+    - name: x-goog-api-key
+      value: "{{api_key_gemini}}"
+  body:
+    type: json
+    data: "{\r
+
+      \  \"model\": \"gemini-3.5-flash-lite\",\r
+
+      \  \"input\": \"Você é um analista comercial responsável por analisar uma única reunião comercial.\\n\\nREGRAS DE ANÁLISE:\\n1. Os dados do cliente servem apenas como contexto auxiliar para interpretar a conversa. Eles NÃO são evidência de um sinal comercial.\\n2. Todo sinal comercial deve obrigatoriamente possuir suporte textual na transcrição.\\n3. Identifique primeiro os sinais comerciais e somente depois gere os insights.\\n4. Os insights devem ser derivados exclusivamente dos sinais comerciais identificados nesta análise.\\n5. Não invente fatos, intenções, necessidades, riscos, oportunidades, concorrentes, orçamento ou prazos que não estejam sustentados pela transcrição.\\n6. Não transforme possibilidades em certezas.\\n7. A evidência deve conter um trecho curto e fiel da transcrição que sustente o sinal identificado.\\n8. A relevância representa a força da evidência do sinal:\\n   - ALTA: o sinal é declarado de forma direta e inequívoca na transcrição.\\n   - MEDIA: o sinal é uma inferência forte e diretamente sustentada pelo contexto textual, embora não tenha sido declarado literalmente.\\n   - BAIXA: existe apenas um indício razoável ou uma inferência indireta. Deve ser tratado como possibilidade, nunca como fato confirmado.\\n9. Se não existir evidência textual suficiente para um sinal, não gere esse sinal.\\n10. Os insights podem combinar vários sinais comerciais, mas não podem adicionar fatos que não estejam fundamentados nesses sinais.\\n11. A severidade de um insight representa seu impacto ou importância comercial, e não a confiança da evidência.\\n12. O sentimento geral representa o tom predominante demonstrado pelo cliente na reunião. A simples existência de uma dor ou problema não significa automaticamente sentimento NEGATIVO.\\n13. CONCORRENCIA deve ser utilizada somente quando a transcrição identificar ou indicar de forma concreta outro fornecedor, empresa, produto, proposta ou solução concorrente. A simples intenção de trocar de fornecedor não deve ser classificada automaticamente como CONCORRENCIA.\\n14. OPORTUNIDADE deve ser utilizada quando houver abertura comercial concreta, como intenção de compra, substituição de solução, expansão, avaliação de fornecedores ou necessidade que possa gerar uma oportunidade comercial.\\n15. A descrição de um sinal deve respeitar o grau de certeza da evidência. Não transforme inferências em fatos nem utilize linguagem mais conclusiva do que o trecho da transcrição permite.\\n16. Quando um mesmo trecho puder pertencer a mais de um tipo de sinal, selecione o tipo que melhor represente sua principal relevância comercial e evite criar sinais semanticamente duplicados.\\n\\nTIPOS DE SINAIS COMERCIAIS:\\nNECESSIDADE: Necessidade ou requisito manifestado pelo cliente.\\nDOR: Problema, dificuldade ou limitação enfrentada pelo cliente.\\nOBJECAO: Resistência, preocupação ou impedimento apresentado pelo cliente.\\nORCAMENTO: Informações relacionadas a orçamento, preço ou capacidade de investimento.\\nPRAZO: Datas, deadlines, urgência ou expectativa temporal.\\nMOMENTO_CLIENTE: Situação atual relevante do negócio, como expansão, mudança ou transformação.\\nCONCORRENCIA: Menção concreta a outro fornecedor, empresa, produto, proposta ou solução concorrente. A mera intenção de trocar de fornecedor não caracteriza, isoladamente, CONCORRENCIA.\\nOPORTUNIDADE: Abertura comercial identificável na fala do cliente, como intenção de compra, substituição de solução, expansão, avaliação de fornecedores ou necessidade com potencial comercial.\\nRISCO_CHURN: Evidências de possível cancelamento, abandono ou substituição da solução atual. Só utilize quando o contexto fornecido permitir concluir que a solução em risco pertence à empresa analisadora; caso contrário, prefira outro tipo de sinal.\\n\\nTIPOS DE INSIGHT:\\nRISCO: Interpretação estratégica de uma situação que pode gerar impacto comercial negativo.\\nOPORTUNIDADE: Interpretação estratégica de uma possibilidade comercial favorável.\\nTENDENCIA: Comportamento, padrão ou direção perceptível na conversa.\\nESTRATEGICO: Interpretação relevante para orientar abordagem ou tomada de decisão comercial.\\n\\nAnalise exclusivamente o seguinte contexto:\\n\\n{\\n  \\\"cliente\\\": {\\n    \\\"nome\\\": \\\"Empresa XPTO\\\",\\n    \\\"segmento\\\": \\\"Varejo\\\",\\n    \\\"porte\\\": \\\"MEDIO\\\"\\n  },\\n  \\\"transcricao\\\": {\\n    \\\"conteudo\\\": \\\"Estamos crescendo e abrindo três novas unidades. Nosso sistema atual não está acompanhando o crescimento e estamos avaliando trocar de fornecedor. Precisamos de algo integrado para financeiro, estoque e gestão.\\\"\\n  }\\n}\",\r
+
+      \  \"response_format\": {\r
+
+      \    \"type\": \"text\",\r
+
+      \    \"mime_type\": \"application/json\",\r
+
+      \    \"schema\": {\r
+
+      \      \"type\": \"object\",\r
+
+      \      \"properties\": {\r
+
+      \        \"resumoExecutivo\": {\r
+
+      \          \"type\": \"string\",\r
+
+      \          \"description\": \"Resumo objetivo da situação comercial apresentada exclusivamente nesta reunião.\"\r
+
+      \        },\r
+
+      \        \"sentimentoGeral\": {\r
+
+      \          \"type\": \"string\",\r
+
+      \          \"enum\": [\r
+
+      \            \"POSITIVO\",\r
+
+      \            \"NEUTRO\",\r
+
+      \            \"NEGATIVO\"\r
+
+      \          ]\r
+
+      \        },\r
+
+      \        \"sinaisComerciais\": {\r
+
+      \          \"type\": \"array\",\r
+
+      \          \"items\": {\r
+
+      \            \"type\": \"object\",\r
+
+      \            \"properties\": {\r
+
+      \              \"tipo\": {\r
+
+      \                \"type\": \"string\",\r
+
+      \                \"enum\": [\r
+
+      \                  \"NECESSIDADE\",\r
+
+      \                  \"DOR\",\r
+
+      \                  \"OBJECAO\",\r
+
+      \                  \"ORCAMENTO\",\r
+
+      \                  \"PRAZO\",\r
+
+      \                  \"MOMENTO_CLIENTE\",\r
+
+      \                  \"CONCORRENCIA\",\r
+
+      \                  \"OPORTUNIDADE\",\r
+
+      \                  \"RISCO_CHURN\"\r
+
+      \                ]\r
+
+      \              },\r
+
+      \              \"descricao\": {\r
+
+      \                \"type\": \"string\",\r
+
+      \                \"description\": \"Descrição objetiva do sinal comercial identificado.\"\r
+
+      \              },\r
+
+      \              \"evidencia\": {\r
+
+      \                \"type\": \"string\",\r
+
+      \                \"description\": \"Trecho curto da transcrição que fundamenta o sinal.\"\r
+
+      \              },\r
+
+      \              \"relevancia\": {\r
+
+      \                \"type\": \"string\",\r
+
+      \                \"enum\": [\r
+
+      \                  \"BAIXA\",\r
+
+      \                  \"MEDIA\",\r
+
+      \                  \"ALTA\"\r
+
+      \                ],\r
+
+      \                \"description\": \"Força da evidência textual que sustenta o sinal.\"\r
+
+      \              }\r
+
+      \            },\r
+
+      \            \"required\": [\r
+
+      \              \"tipo\",\r
+
+      \              \"descricao\",\r
+
+      \              \"evidencia\",\r
+
+      \              \"relevancia\"\r
+
+      \            ]\r
+
+      \          }\r
+
+      \        },\r
+
+      \        \"insights\": {\r
+
+      \          \"type\": \"array\",\r
+
+      \          \"items\": {\r
+
+      \            \"type\": \"object\",\r
+
+      \            \"properties\": {\r
+
+      \              \"tipo\": {\r
+
+      \                \"type\": \"string\",\r
+
+      \                \"enum\": [\r
+
+      \                  \"RISCO\",\r
+
+      \                  \"OPORTUNIDADE\",\r
+
+      \                  \"TENDENCIA\",\r
+
+      \                  \"ESTRATEGICO\"\r
+
+      \                ]\r
+
+      \              },\r
+
+      \              \"descricao\": {\r
+
+      \                \"type\": \"string\",\r
+
+      \                \"description\": \"Interpretação estratégica derivada exclusivamente dos sinais comerciais identificados.\"\r
+
+      \              },\r
+
+      \              \"severidade\": {\r
+
+      \                \"type\": \"string\",\r
+
+      \                \"enum\": [\r
+
+      \                  \"BAIXA\",\r
+
+      \                  \"MEDIA\",\r
+
+      \                  \"ALTA\"\r
+
+      \                ],\r
+
+      \                \"description\": \"Impacto ou importância comercial do insight.\"\r
+
+      \              }\r
+
+      \            },\r
+
+      \            \"required\": [\r
+
+      \              \"tipo\",\r
+
+      \              \"descricao\",\r
+
+      \              \"severidade\"\r
+
+      \            ]\r
+
+      \          }\r
+
+      \        }\r
+
+      \      },\r
+
+      \      \"required\": [\r
+
+      \        \"resumoExecutivo\",\r
+
+      \        \"sentimentoGeral\",\r
+
+      \        \"sinaisComerciais\",\r
+
+      \        \"insights\"\r
+
+      \      ]\r
+
+      \    }\r
+
+      \  }\r
+
+      }"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

@@ -1,0 +1,35 @@
+info:
+  name: UploadTranscricao
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{base_url}}/api/v1/transcricoes/upload"
+  body:
+    type: multipart-form
+    data:
+      - name: arquivo
+        type: file
+        value:
+          - postman-cloud:///1f1a79e7-a557-4bd0-aa8f-372cded18cb2
+      - name: clienteId
+        type: text
+        value: "1"
+      - name: usuarioId
+        type: text
+        value: "1"
+      - name: dataReuniao
+        type: text
+        value: 2026-09-02T14:30:00
+      - name: duracaoMinutos
+        type: text
+        value: "15"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
