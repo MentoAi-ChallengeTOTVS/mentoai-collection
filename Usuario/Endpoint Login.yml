@@ -1,11 +1,11 @@
 info:
-  name: POST usuário
+  name: Endpoint Login
   type: http
-  seq: 5
+  seq: 4
 
 http:
-  method: POST
-  url: http://localhost:8080/api/v1/usuarios
+  method: post
+  url: http://localhost:8080/api/v1/auth/login
   headers:
     - name: Content-Type
       value: application/json
@@ -13,15 +13,13 @@ http:
     type: json
     data: |-
       {
-        "nome": "Pedro Cunha Coutinho",
         "email": "pedrocoutinho32145@mentoai.com.br",
-        "senha": "senhaSegura123",
-        "perfil": "DIRETOR_COMERCIAL"
+        "senha": "senhaSegura123"
       }
   auth: inherit
 
 settings:
-  encodeUrl: true
+  encodeUrl: false
   timeout: 0
   followRedirects: true
   maxRedirects: 5

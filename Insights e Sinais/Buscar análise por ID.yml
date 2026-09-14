@@ -6,7 +6,9 @@ info:
 http:
   method: GET
   url: "{{baseUrl}}/api/v1/analises/{{analiseId}}"
-  auth: inherit
+  auth:
+    type: bearer
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwZWRyb2NvdXRpbmhvMzIxNDVAbWVudG9haS5jb20uYnIiLCJyb2xlIjoiRElSRVRPUl9DT01FUkNJQUwiLCJpYXQiOjE3ODkzNDY3NjcsImV4cCI6MTc4OTQzMzE2N30.ACS3_6IBFOLRvnfAipq-V8-TV0ak3oedjnrcj_42OxY
 
 runtime:
   variables:

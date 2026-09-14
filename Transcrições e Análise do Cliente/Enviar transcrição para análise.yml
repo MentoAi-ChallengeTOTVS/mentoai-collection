@@ -31,7 +31,9 @@ http:
         type: text
         value: "45"
         description: Inteiro maior ou igual a zero.
-  auth: inherit
+  auth:
+    type: bearer
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwZWRyb2NvdXRpbmhvMzIxNDVAbWVudG9haS5jb20uYnIiLCJyb2xlIjoiRElSRVRPUl9DT01FUkNJQUwiLCJpYXQiOjE3ODkzNDg3OTEsImV4cCI6MTc4OTQzNTE5MX0.vTiW1UmHg6ZDnjBnk8bVKc1vWkWlFqoybA2dJckoJpo
 
 runtime:
   variables:

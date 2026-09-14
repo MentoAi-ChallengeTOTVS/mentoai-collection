@@ -5,18 +5,20 @@ info:
 
 http:
   method: get
-  url: http://localhost:8080/api/v1/alertas?page=0&size=10&sort=criacao,desc
+  url: http://localhost:8080/api/v1/alertas?page=0&size=100&sort=criacao,desc
   params:
     - name: page
       value: "0"
       type: query
     - name: size
-      value: "10"
+      value: "100"
       type: query
     - name: sort
       value: criacao,desc
       type: query
-  auth: inherit
+  auth:
+    type: bearer
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwZWRyb2NvdXRpbmhvMzIxNDVAbWVudG9haS5jb20uYnIiLCJyb2xlIjoiRElSRVRPUl9DT01FUkNJQUwiLCJpYXQiOjE3ODkzNDY3NjcsImV4cCI6MTc4OTQzMzE2N30.ACS3_6IBFOLRvnfAipq-V8-TV0ak3oedjnrcj_42OxY
 
 settings:
   encodeUrl: false
