@@ -11,7 +11,7 @@ http:
       value: application/json
   auth:
     type: bearer
-    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwZWRyb2NvdXRpbmhvMzIxNDVAbWVudG9haS5jb20uYnIiLCJyb2xlIjoiRElSRVRPUl9DT01FUkNJQUwiLCJpYXQiOjE3ODkzNDY3NjcsImV4cCI6MTc4OTQzMzE2N30.ACS3_6IBFOLRvnfAipq-V8-TV0ak3oedjnrcj_42OxY
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwZWRyb2NvdXRpbmhvOTFAaWNsb3VkLmNvbSIsInJvbGUiOiJESVJFVE9SX0NPTUVSQ0lBTCIsImlhdCI6MTc4OTM1NDg2MiwiZXhwIjoxNzg5NDQxMjYyfQ.Jnifys0k7s8fHdq9I0FlovMcRWJWP34uBgPUl5uqlx8
 
 settings:
   encodeUrl: true

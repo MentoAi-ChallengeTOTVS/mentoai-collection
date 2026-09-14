@@ -1,0 +1,37 @@
+info:
+  name: Alterar Usuario
+  type: http
+  seq: 5
+
+http:
+  method: put
+  url: http://localhost:8080/api/v1/usuarios/{{usuarioid}}
+  headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer COLE_SEU_TOKEN_JWT_AQUI
+  body:
+    type: json
+    data: |-
+      {
+        "nome": "Banca FIAP",
+        "email": "pedrocoutinho91@icloud.com",
+        "senha": "bancafiap2026",
+        "perfil": "DIRETOR_COMERCIAL"
+      }
+  auth:
+    type: bearer
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwZWRyb2NvdXRpbmhvOTFAaWNsb3VkLmNvbSIsInJvbGUiOiJESVJFVE9SX0NPTUVSQ0lBTCIsImlhdCI6MTc4OTM1NDg2MiwiZXhwIjoxNzg5NDQxMjYyfQ.Jnifys0k7s8fHdq9I0FlovMcRWJWP34uBgPUl5uqlx8
+
+runtime:
+  variables:
+    - name: usuarioid
+      value: "7"
+
+settings:
+  encodeUrl: false
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

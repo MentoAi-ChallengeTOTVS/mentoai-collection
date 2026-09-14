@@ -14,7 +14,7 @@ http:
     data: |-
       {
         "email": "pedrocoutinho91@icloud.com",
-        "senha": "PedroMentoAi2026"
+        "senha": "bancafiap2026"
       }
   auth: inherit
 

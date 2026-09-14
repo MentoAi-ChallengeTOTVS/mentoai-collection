@@ -14,11 +14,13 @@ http:
     data: |-
       {
         "nome": "Pedro Cunha Coutinho",
-        "email": "pedrocoutinho32145@mentoai.com.br",
-        "senha": "senhaSegura123",
+        "email": "pedrocoutinho91@icloud.com",
+        "senha": "PedroMentoAi2026",
         "perfil": "DIRETOR_COMERCIAL"
       }
-  auth: inherit
+  auth:
+    type: bearer
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwZWRyb2NvdXRpbmhvMzIxNDVAbWVudG9haS5jb20uYnIiLCJyb2xlIjoiRElSRVRPUl9DT01FUkNJQUwiLCJpYXQiOjE3ODkzNTMxODcsImV4cCI6MTc4OTQzOTU4N30.oAxACbE42Tj7I0kcM9xqipH6DO0tT_Jg6M-1aJMsLhk
 
 settings:
   encodeUrl: true
