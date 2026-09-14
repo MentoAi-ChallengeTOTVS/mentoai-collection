@@ -1,0 +1,28 @@
+info:
+  name: SMTP E-mail Feedback
+  type: http
+  seq: 1
+
+http:
+  method: post
+  url: http://localhost:8080/api/v1/feedbacks
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "nota": 5,
+        "comentario": "Excelente copiloto comercial! Facilitou muito a rotina."
+      }
+  auth:
+    type: bearer
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwZWRyb2NvdXRpbmhvOTFAaWNsb3VkLmNvbSIsInJvbGUiOiJESVJFVE9SX0NPTUVSQ0lBTCIsImlhdCI6MTc4OTM1Mzk2MywiZXhwIjoxNzg5NDQwMzYzfQ.yt_MZDybc6lzs7xjf9G9xbGpOkOvSAQXmfcfRbfvLE4
+
+settings:
+  encodeUrl: false
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

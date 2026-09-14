@@ -13,8 +13,8 @@ http:
     type: json
     data: |-
       {
-        "email": "pedrocoutinho32145@mentoai.com.br",
-        "senha": "senhaSegura123"
+        "email": "pedrocoutinho91@icloud.com",
+        "senha": "PedroMentoAi2026"
       }
   auth: inherit
 
