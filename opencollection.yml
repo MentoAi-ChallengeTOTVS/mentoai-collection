@@ -15,20 +15,59 @@ config:
       bypassProxy: ""
 
 request:
-  variables:
-    - name: reuniaoId
-      value:
-        type: number
-        data: "22"
-    - name: transcricaoId
-      value:
-        type: number
-        data: "22"
-    - name: analiseId
-      value:
-        type: number
-        data: "22"
-bundled: false
+    variables:
+      - name: reuniaoId
+        value:
+          type: number
+          data: "22"
+      - name: transcricaoId
+        value:
+          type: number
+          data: "22"
+      - name: analiseId
+        value:
+          type: number
+          data: "22"
+      - name: baseUrl
+        value:
+          type: text
+          data: "http://localhost:8080"
+      - name: base_url
+        value:
+          type: text
+          data: "http://localhost:8080"
+      - name: token
+        value:
+          type: text
+          data: ""
+      - name: email
+        value:
+          type: text
+          data: ""
+      - name: senha
+        value:
+          type: text
+          data: ""
+      - name: emailNovoUsuario
+        value:
+          type: text
+          data: ""
+      - name: usuarioId
+        value:
+          type: number
+          data: ""
+      - name: clienteId
+        value:
+          type: number
+          data: ""
+      - name: alertaId
+        value:
+          type: number
+          data: ""
+      - name: chatId
+        value:
+          type: number
+          data: ""bundled: false
 extensions:
   bruno:
     ignore:

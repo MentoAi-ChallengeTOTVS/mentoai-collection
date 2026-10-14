@@ -1,0 +1,1563 @@
+{
+  "info": {
+    "_postman_id": "1e535014-cd3c-4f40-b834-f9e27acb6071",
+    "name": "MentoAI API — todas as rotas",
+    "description": "Collection Postman baseada nos 29 mappings REST atuais. Login público; rotas /usuarios exigem perfil DIRETOR_COMERCIAL; demais exigem Bearer JWT.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "default"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "secret"
+    },
+    {
+      "key": "email",
+      "value": "",
+      "type": "default"
+    },
+    {
+      "key": "senha",
+      "value": "",
+      "type": "secret"
+    },
+    {
+      "key": "emailNovoUsuario",
+      "value": "",
+      "type": "default"
+    },
+    {
+      "key": "usuarioId",
+      "value": "",
+      "type": "default"
+    },
+    {
+      "key": "clienteId",
+      "value": "",
+      "type": "default"
+    },
+    {
+      "key": "reuniaoId",
+      "value": "",
+      "type": "default"
+    },
+    {
+      "key": "transcricaoId",
+      "value": "",
+      "type": "default"
+    },
+    {
+      "key": "analiseId",
+      "value": "",
+      "type": "default"
+    },
+    {
+      "key": "alertaId",
+      "value": "",
+      "type": "default"
+    },
+    {
+      "key": "chatId",
+      "value": "",
+      "type": "default"
+    },
+    {
+      "key": "page",
+      "value": "0",
+      "type": "default"
+    },
+    {
+      "key": "pageSize",
+      "value": "10",
+      "type": "default"
+    },
+    {
+      "key": "clientePageSize",
+      "value": "20",
+      "type": "default"
+    },
+    {
+      "key": "copilotPageSize",
+      "value": "10",
+      "type": "default"
+    },
+    {
+      "key": "historyPageSize",
+      "value": "20",
+      "type": "default"
+    },
+    {
+      "key": "filtroNome",
+      "value": "",
+      "type": "default"
+    },
+    {
+      "key": "filtroSegmento",
+      "value": "",
+      "type": "default"
+    },
+    {
+      "key": "filtroPorte",
+      "value": "",
+      "type": "default"
+    },
+    {
+      "key": "filtroStatus",
+      "value": "",
+      "type": "default"
+    }
+  ],
+  "item": [
+    {
+      "name": "Autenticação",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{email}}\",\n  \"senha\": \"{{senha}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/api/v1/auth/login",
+            "description": "Público. Em sucesso (200), salva o token no environment.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });",
+                  "if (pm.response.code === 200) { const d = pm.response.json(); if (d.token) pm.environment.set(\"token\", d.token); }"
+                ]
+              }
+            }
+          ],
+          "response": [
+            {
+              "name": "Exemplo 200",
+              "originalRequest": {
+                "method": "POST",
+                "url": "{{baseUrl}}/api/v1/auth/login"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"token\": \"<JWT retornado pelo backend>\",\n  \"tipo\": \"Bearer\",\n  \"email\": \"usuario@exemplo.com\",\n  \"role\": \"DIRETOR_COMERCIAL\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Usuários",
+      "item": [
+        {
+          "name": "Criar usuário",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Usuário Exemplo\",\n  \"email\": \"{{emailNovoUsuario}}\",\n  \"senha\": \"{{senha}}\",\n  \"perfil\": \"EXECUTIVO_COMERCIAL\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/api/v1/usuarios",
+            "description": "Requer Bearer JWT com perfil DIRETOR_COMERCIAL. perfil: EXECUTIVO_COMERCIAL ou DIRETOR_COMERCIAL."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 201\", function () { pm.response.to.have.status(201); });",
+                  "if (pm.response.code >= 200 && pm.response.code < 300) { const d = pm.response.json(); if (d.id) pm.environment.set('usuarioId', String(d.id)); }"
+                ]
+              }
+            }
+          ],
+          "response": [
+            {
+              "name": "Exemplo 201",
+              "originalRequest": {
+                "method": "POST",
+                "url": "{{baseUrl}}/api/v1/usuarios"
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": 7,\n  \"nome\": \"Usuário Exemplo\",\n  \"email\": \"usuario@exemplo.com\",\n  \"perfil\": \"DIRETOR_COMERCIAL\",\n  \"ativo\": true,\n  \"criacao\": \"2026-10-13T10:00:00\",\n  \"atualizacao\": \"2026-10-13T10:00:00\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Listar usuários",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/v1/usuarios?page={{page}}&size={{pageSize}}&sort=nome,asc",
+            "description": "Requer perfil DIRETOR_COMERCIAL. Paginação Spring Data."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ],
+          "response": [
+            {
+              "name": "Exemplo 200",
+              "originalRequest": {
+                "method": "GET",
+                "url": "{{baseUrl}}/api/v1/usuarios?page={{page}}&size={{pageSize}}&sort=nome,asc"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"content\": [\n    {\n      \"id\": 7,\n      \"nome\": \"Usuário Exemplo\",\n      \"email\": \"usuario@exemplo.com\",\n      \"perfil\": \"DIRETOR_COMERCIAL\",\n      \"ativo\": true,\n      \"criacao\": \"2026-10-13T10:00:00\",\n      \"atualizacao\": \"2026-10-13T10:00:00\"\n    }\n  ],\n  \"pageable\": {\n    \"pageNumber\": 0,\n    \"pageSize\": 10,\n    \"sort\": {\n      \"empty\": false,\n      \"sorted\": true,\n      \"unsorted\": false\n    },\n    \"offset\": 0,\n    \"paged\": true,\n    \"unpaged\": false\n  },\n  \"last\": true,\n  \"totalPages\": 1,\n  \"totalElements\": 1,\n  \"size\": 10,\n  \"number\": 0,\n  \"sort\": {\n    \"empty\": false,\n    \"sorted\": true,\n    \"unsorted\": false\n  },\n  \"first\": true,\n  \"numberOfElements\": 1,\n  \"empty\": false\n}"
+            }
+          ]
+        },
+        {
+          "name": "Buscar usuário por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/v1/usuarios/{{usuarioId}}",
+            "description": "Requer perfil DIRETOR_COMERCIAL."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ],
+          "response": [
+            {
+              "name": "Exemplo 200",
+              "originalRequest": {
+                "method": "GET",
+                "url": "{{baseUrl}}/api/v1/usuarios/{{usuarioId}}"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": 7,\n  \"nome\": \"Usuário Exemplo\",\n  \"email\": \"usuario@exemplo.com\",\n  \"perfil\": \"DIRETOR_COMERCIAL\",\n  \"ativo\": true,\n  \"criacao\": \"2026-10-13T10:00:00\",\n  \"atualizacao\": \"2026-10-13T10:00:00\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Atualizar usuário",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Usuário Exemplo\",\n  \"email\": \"{{email}}\",\n  \"senha\": \"{{senha}}\",\n  \"perfil\": \"DIRETOR_COMERCIAL\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/api/v1/usuarios/{{usuarioId}}",
+            "description": "Requer perfil DIRETOR_COMERCIAL. Substitui os dados informados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ],
+          "response": [
+            {
+              "name": "Exemplo 200",
+              "originalRequest": {
+                "method": "PUT",
+                "url": "{{baseUrl}}/api/v1/usuarios/{{usuarioId}}"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": 7,\n  \"nome\": \"Usuário Exemplo\",\n  \"email\": \"usuario@exemplo.com\",\n  \"perfil\": \"DIRETOR_COMERCIAL\",\n  \"ativo\": true,\n  \"criacao\": \"2026-10-13T10:00:00\",\n  \"atualizacao\": \"2026-10-13T10:00:00\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Alterar status do usuário",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ativo\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/api/v1/usuarios/{{usuarioId}}/status",
+            "description": "Requer perfil DIRETOR_COMERCIAL."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ],
+          "response": [
+            {
+              "name": "Exemplo 200",
+              "originalRequest": {
+                "method": "PATCH",
+                "url": "{{baseUrl}}/api/v1/usuarios/{{usuarioId}}/status"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": 7,\n  \"nome\": \"Usuário Exemplo\",\n  \"email\": \"usuario@exemplo.com\",\n  \"perfil\": \"DIRETOR_COMERCIAL\",\n  \"ativo\": false,\n  \"criacao\": \"2026-10-13T10:00:00\",\n  \"atualizacao\": \"2026-10-13T10:00:00\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Clientes",
+      "item": [
+        {
+          "name": "Criar cliente",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Empresa Exemplo\",\n  \"segmento\": \"Tecnologia\",\n  \"porte\": \"MEDIO\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/api/v1/clientes",
+            "description": "Porte é texto livre; nome/segmento/porte obrigatórios (máximos 255/100/50)."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 201\", function () { pm.response.to.have.status(201); });",
+                  "if (pm.response.code >= 200 && pm.response.code < 300) { const d = pm.response.json(); if (d.id) pm.environment.set('clienteId', String(d.id)); }"
+                ]
+              }
+            }
+          ],
+          "response": [
+            {
+              "name": "Exemplo 201",
+              "originalRequest": {
+                "method": "POST",
+                "url": "{{baseUrl}}/api/v1/clientes"
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": 15,\n  \"nome\": \"Empresa Exemplo\",\n  \"segmento\": \"Tecnologia\",\n  \"porte\": \"MEDIO\",\n  \"criacao\": \"2026-10-13T10:00:00\",\n  \"status\": true,\n  \"resumoContextual\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Listar clientes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/clientes?nome={{filtroNome}}&segmento={{filtroSegmento}}&porte={{filtroPorte}}&status={{filtroStatus}}&page={{page}}&size={{clientePageSize}}&sort=nome&direction=asc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "clientes"
+              ],
+              "query": [
+                {
+                  "key": "nome",
+                  "value": "{{filtroNome}}",
+                  "disabled": true
+                },
+                {
+                  "key": "segmento",
+                  "value": "{{filtroSegmento}}",
+                  "disabled": true
+                },
+                {
+                  "key": "porte",
+                  "value": "{{filtroPorte}}",
+                  "disabled": true
+                },
+                {
+                  "key": "status",
+                  "value": "{{filtroStatus}}",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "{{page}}"
+                },
+                {
+                  "key": "size",
+                  "value": "{{clientePageSize}}"
+                },
+                {
+                  "key": "sort",
+                  "value": "nome"
+                },
+                {
+                  "key": "direction",
+                  "value": "asc"
+                }
+              ]
+            },
+            "description": "Filtros opcionais; parâmetros page, size, sort e direction controlam paginação e ordenação."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ],
+          "response": [
+            {
+              "name": "Exemplo 200",
+              "originalRequest": {
+                "method": "GET",
+                "url": "{{baseUrl}}/api/v1/clientes?nome={{filtroNome}}&segmento={{filtroSegmento}}&porte={{filtroPorte}}&status={{filtroStatus}}&page={{page}}&size={{clientePageSize}}&sort=nome&direction=asc"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"conteudo\": [\n    {\n      \"id\": 15,\n      \"nome\": \"Empresa Exemplo\",\n      \"segmento\": \"Tecnologia\",\n      \"porte\": \"MEDIO\",\n      \"criacao\": \"2026-10-13T10:00:00\",\n      \"status\": true,\n      \"resumoContextual\": null\n    }\n  ],\n  \"pagina\": 0,\n  \"tamanho\": 20,\n  \"totalElementos\": 1,\n  \"totalPaginas\": 1\n}"
+            }
+          ]
+        },
+        {
+          "name": "Buscar cliente por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/v1/clientes/{{clienteId}}",
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ],
+          "response": [
+            {
+              "name": "Exemplo 200",
+              "originalRequest": {
+                "method": "GET",
+                "url": "{{baseUrl}}/api/v1/clientes/{{clienteId}}"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": 15,\n  \"nome\": \"Empresa Exemplo\",\n  \"segmento\": \"Tecnologia\",\n  \"porte\": \"MEDIO\",\n  \"criacao\": \"2026-10-13T10:00:00\",\n  \"status\": true,\n  \"resumoContextual\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Atualizar cliente",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Empresa Exemplo Atualizada\",\n  \"segmento\": \"Tecnologia\",\n  \"porte\": \"GRANDE\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/api/v1/clientes/{{clienteId}}",
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ],
+          "response": [
+            {
+              "name": "Exemplo 200",
+              "originalRequest": {
+                "method": "PUT",
+                "url": "{{baseUrl}}/api/v1/clientes/{{clienteId}}"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": 15,\n  \"nome\": \"Empresa Exemplo\",\n  \"segmento\": \"Tecnologia\",\n  \"porte\": \"MEDIO\",\n  \"criacao\": \"2026-10-13T10:00:00\",\n  \"status\": true,\n  \"resumoContextual\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Alterar status do cliente",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/api/v1/clientes/{{clienteId}}/status",
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ],
+          "response": [
+            {
+              "name": "Exemplo 200",
+              "originalRequest": {
+                "method": "PATCH",
+                "url": "{{baseUrl}}/api/v1/clientes/{{clienteId}}/status"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": 15,\n  \"nome\": \"Empresa Exemplo\",\n  \"segmento\": \"Tecnologia\",\n  \"porte\": \"MEDIO\",\n  \"criacao\": \"2026-10-13T10:00:00\",\n  \"status\": false,\n  \"resumoContextual\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Listar reuniões do cliente",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/v1/clientes/{{clienteId}}/reunioes",
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });",
+                  "if (pm.response.code === 200) { const d = pm.response.json(); if (Array.isArray(d) && d.length && d[0].id) pm.environment.set(\"reuniaoId\", String(d[0].id)); }"
+                ]
+              }
+            }
+          ],
+          "response": [
+            {
+              "name": "Exemplo 200",
+              "originalRequest": {
+                "method": "GET",
+                "url": "{{baseUrl}}/api/v1/clientes/{{clienteId}}/reunioes"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "[\n  {\n    \"id\": 18,\n    \"dataReuniao\": \"2026-10-13T10:00:00\",\n    \"duracaoMinutos\": 45,\n    \"clienteId\": 15,\n    \"usuarioId\": 7,\n    \"criacao\": \"2026-10-13T10:01:00\"\n  }\n]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Reuniões",
+      "item": [
+        {
+          "name": "Listar reuniões",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/v1/reunioes",
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });",
+                  "if (pm.response.code === 200) { const d = pm.response.json(); if (Array.isArray(d) && d.length && d[0].id) pm.environment.set(\"reuniaoId\", String(d[0].id)); }"
+                ]
+              }
+            }
+          ],
+          "response": [
+            {
+              "name": "Exemplo 200",
+              "originalRequest": {
+                "method": "GET",
+                "url": "{{baseUrl}}/api/v1/reunioes"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "[\n  {\n    \"id\": 18,\n    \"dataReuniao\": \"2026-10-13T10:00:00\",\n    \"duracaoMinutos\": 45,\n    \"clienteId\": 15,\n    \"usuarioId\": 7,\n    \"criacao\": \"2026-10-13T10:01:00\"\n  }\n]"
+            }
+          ]
+        },
+        {
+          "name": "Buscar reunião por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/v1/reunioes/{{reuniaoId}}",
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ],
+          "response": [
+            {
+              "name": "Exemplo 200",
+              "originalRequest": {
+                "method": "GET",
+                "url": "{{baseUrl}}/api/v1/reunioes/{{reuniaoId}}"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": 18,\n  \"dataReuniao\": \"2026-10-13T10:00:00\",\n  \"duracaoMinutos\": 45,\n  \"clienteId\": 15,\n  \"usuarioId\": 7,\n  \"criacao\": \"2026-10-13T10:01:00\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Buscar transcrição da reunião",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/v1/reunioes/{{reuniaoId}}/transcricao",
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });",
+                  "if (pm.response.code >= 200 && pm.response.code < 300) { const d = pm.response.json(); if (d.id) pm.environment.set('transcricaoId', String(d.id)); }"
+                ]
+              }
+            }
+          ],
+          "response": [
+            {
+              "name": "Exemplo 200",
+              "originalRequest": {
+                "method": "GET",
+                "url": "{{baseUrl}}/api/v1/reunioes/{{reuniaoId}}/transcricao"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": 22,\n  \"conteudo\": \"Transcrição de exemplo.\",\n  \"nomeArquivo\": \"reuniao.txt\",\n  \"formatoArquivo\": \"TXT\",\n  \"idioma\": \"pt-BR\",\n  \"reuniaoId\": 18,\n  \"criacao\": \"2026-10-13T10:01:00\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Transcrições",
+      "item": [
+        {
+          "name": "Listar transcrições",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/v1/transcricoes",
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ],
+          "response": [
+            {
+              "name": "Exemplo 200",
+              "originalRequest": {
+                "method": "GET",
+                "url": "{{baseUrl}}/api/v1/transcricoes"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "[\n  {\n    \"id\": 22,\n    \"conteudo\": \"Transcrição de exemplo.\",\n    \"nomeArquivo\": \"reuniao.txt\",\n    \"formatoArquivo\": \"TXT\",\n    \"idioma\": \"pt-BR\",\n    \"reuniaoId\": 18,\n    \"criacao\": \"2026-10-13T10:01:00\"\n  }\n]"
+            }
+          ]
+        },
+        {
+          "name": "Buscar transcrição por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/v1/transcricoes/{{transcricaoId}}",
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ],
+          "response": [
+            {
+              "name": "Exemplo 200",
+              "originalRequest": {
+                "method": "GET",
+                "url": "{{baseUrl}}/api/v1/transcricoes/{{transcricaoId}}"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": 22,\n  \"conteudo\": \"Transcrição de exemplo.\",\n  \"nomeArquivo\": \"reuniao.txt\",\n  \"formatoArquivo\": \"TXT\",\n  \"idioma\": \"pt-BR\",\n  \"reuniaoId\": 18,\n  \"criacao\": \"2026-10-13T10:01:00\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Enviar transcrição para análise",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "{{baseUrl}}/api/v1/transcricoes/upload",
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "arquivo",
+                  "value": "",
+                  "type": "file",
+                  "src": ""
+                },
+                {
+                  "key": "clienteId",
+                  "value": "{{clienteId}}",
+                  "type": "text"
+                },
+                {
+                  "key": "usuarioId",
+                  "value": "{{usuarioId}}",
+                  "type": "text"
+                },
+                {
+                  "key": "dataReuniao",
+                  "value": "2026-10-13T10:00:00",
+                  "type": "text"
+                },
+                {
+                  "key": "duracaoMinutos",
+                  "value": "45",
+                  "type": "text"
+                }
+              ]
+            },
+            "description": "multipart/form-data. Selecione um arquivo .txt; não configure manualmente Content-Type/boundary."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 202\", function () { pm.response.to.have.status(202); });",
+                  "if (pm.response.code === 202) { const d = pm.response.json(); for (const k of [\"reuniaoId\",\"transcricaoId\",\"analiseId\"]) if (d[k] !== undefined) pm.environment.set(k, String(d[k])); }"
+                ]
+              }
+            }
+          ],
+          "response": [
+            {
+              "name": "Exemplo 202",
+              "originalRequest": {
+                "method": "POST",
+                "url": "{{baseUrl}}/api/v1/transcricoes/upload"
+              },
+              "status": "Accepted",
+              "code": 202,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"reuniaoId\": 18,\n  \"transcricaoId\": 22,\n  \"analiseId\": 30,\n  \"status\": \"PENDENTE\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Análises",
+      "item": [
+        {
+          "name": "Consultar fila de análises",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/v1/analises/fila",
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ],
+          "response": [
+            {
+              "name": "Exemplo 200",
+              "originalRequest": {
+                "method": "GET",
+                "url": "{{baseUrl}}/api/v1/analises/fila"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"fila\": [\n    {\n      \"analiseId\": 30,\n      \"reuniaoId\": 18,\n      \"clienteId\": 15,\n      \"clienteNome\": \"Empresa Exemplo\",\n      \"status\": \"PENDENTE\",\n      \"criadoEm\": \"2026-10-13T10:01:00\",\n      \"iniciadoEm\": null,\n      \"finalizadoEm\": null,\n      \"mensagemErro\": null\n    }\n  ],\n  \"finalizados\": []\n}"
+            }
+          ]
+        },
+        {
+          "name": "Buscar análise por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/v1/analises/{{analiseId}}",
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ],
+          "response": [
+            {
+              "name": "Exemplo 200",
+              "originalRequest": {
+                "method": "GET",
+                "url": "{{baseUrl}}/api/v1/analises/{{analiseId}}"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": 30,\n  \"reuniaoId\": 18,\n  \"resumoExecutivo\": \"Resumo executivo de exemplo.\",\n  \"sentimentoGeral\": \"NEUTRO\",\n  \"statusProcessamento\": \"PROCESSADA\",\n  \"criacao\": \"2026-10-13T10:02:00\",\n  \"iniciadoEm\": \"2026-10-13T10:02:00\",\n  \"finalizadoEm\": \"2026-10-13T10:03:00\",\n  \"mensagemErro\": null,\n  \"insights\": [\n    {\n      \"id\": 72,\n      \"analiseId\": 30,\n      \"tipo\": \"RISCO\",\n      \"descricao\": \"Insight de exemplo\",\n      \"severidade\": \"MEDIA\",\n      \"criacao\": \"2026-10-13T10:03:00\"\n    }\n  ],\n  \"sinaisComerciais\": [\n    {\n      \"id\": 52,\n      \"analiseId\": 30,\n      \"tipo\": \"DOR\",\n      \"descricao\": \"Sinal de exemplo\",\n      \"evidencia\": \"Trecho demonstrativo\",\n      \"relevancia\": \"MEDIA\",\n      \"criacao\": \"2026-10-13T10:03:00\"\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Buscar análise por reunião",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/v1/analises/reuniao/{{reuniaoId}}",
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ],
+          "response": [
+            {
+              "name": "Exemplo 200",
+              "originalRequest": {
+                "method": "GET",
+                "url": "{{baseUrl}}/api/v1/analises/reuniao/{{reuniaoId}}"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": 30,\n  \"reuniaoId\": 18,\n  \"resumoExecutivo\": \"Resumo executivo de exemplo.\",\n  \"sentimentoGeral\": \"NEUTRO\",\n  \"statusProcessamento\": \"PROCESSADA\",\n  \"criacao\": \"2026-10-13T10:02:00\",\n  \"iniciadoEm\": \"2026-10-13T10:02:00\",\n  \"finalizadoEm\": \"2026-10-13T10:03:00\",\n  \"mensagemErro\": null,\n  \"insights\": [\n    {\n      \"id\": 72,\n      \"analiseId\": 30,\n      \"tipo\": \"RISCO\",\n      \"descricao\": \"Insight de exemplo\",\n      \"severidade\": \"MEDIA\",\n      \"criacao\": \"2026-10-13T10:03:00\"\n    }\n  ],\n  \"sinaisComerciais\": [\n    {\n      \"id\": 52,\n      \"analiseId\": 30,\n      \"tipo\": \"DOR\",\n      \"descricao\": \"Sinal de exemplo\",\n      \"evidencia\": \"Trecho demonstrativo\",\n      \"relevancia\": \"MEDIA\",\n      \"criacao\": \"2026-10-13T10:03:00\"\n    }\n  ]\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Alertas",
+      "item": [
+        {
+          "name": "Listar alertas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/v1/alertas?page={{page}}&size={{pageSize}}&sort=criacao,desc",
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });",
+                  "if (pm.response.code === 200) { const d = pm.response.json(); if (d.content && d.content.length && d.content[0].id) pm.environment.set(\"alertaId\", String(d.content[0].id)); }"
+                ]
+              }
+            }
+          ],
+          "response": [
+            {
+              "name": "Exemplo 200",
+              "originalRequest": {
+                "method": "GET",
+                "url": "{{baseUrl}}/api/v1/alertas?page={{page}}&size={{pageSize}}&sort=criacao,desc"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"content\": [\n    {\n      \"id\": 41,\n      \"sinalComercialId\": 52,\n      \"analiseId\": 30,\n      \"reuniaoId\": 18,\n      \"prioridade\": \"MEDIA\",\n      \"motivo\": \"Alerta de exemplo\",\n      \"criacao\": \"2026-10-13T10:03:00\"\n    }\n  ],\n  \"pageable\": {\n    \"pageNumber\": 0,\n    \"pageSize\": 10,\n    \"sort\": {\n      \"empty\": false,\n      \"sorted\": true,\n      \"unsorted\": false\n    },\n    \"offset\": 0,\n    \"paged\": true,\n    \"unpaged\": false\n  },\n  \"last\": true,\n  \"totalPages\": 1,\n  \"totalElements\": 1,\n  \"size\": 10,\n  \"number\": 0,\n  \"sort\": {\n    \"empty\": false,\n    \"sorted\": true,\n    \"unsorted\": false\n  },\n  \"first\": true,\n  \"numberOfElements\": 1,\n  \"empty\": false\n}"
+            }
+          ]
+        },
+        {
+          "name": "Buscar alerta por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/v1/alertas/{{alertaId}}",
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ],
+          "response": [
+            {
+              "name": "Exemplo 200",
+              "originalRequest": {
+                "method": "GET",
+                "url": "{{baseUrl}}/api/v1/alertas/{{alertaId}}"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": 41,\n  \"sinalComercialId\": 52,\n  \"analiseId\": 30,\n  \"reuniaoId\": 18,\n  \"prioridade\": \"MEDIA\",\n  \"motivo\": \"Alerta de exemplo\",\n  \"criacao\": \"2026-10-13T10:03:00\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Marcar alerta como lido",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": "{{baseUrl}}/api/v1/alertas/{{alertaId}}/lido",
+            "description": "Não recebe body no controller atual. Retorna estado de leitura para o usuário autenticado."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ],
+          "response": [
+            {
+              "name": "Exemplo 200",
+              "originalRequest": {
+                "method": "PATCH",
+                "url": "{{baseUrl}}/api/v1/alertas/{{alertaId}}/lido"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": 90,\n  \"alertaId\": 41,\n  \"usuarioId\": 7,\n  \"lido\": true,\n  \"lidoEm\": \"2026-10-13T10:10:00\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Feedback",
+      "item": [
+        {
+          "name": "Enviar feedback",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nota\": 5,\n  \"comentario\": \"Feedback de exemplo\",\n  \"emailCopy\": \"{{email}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/api/v1/feedbacks",
+            "description": "nota entre 1 e 5; comentario e emailCopy opcionais."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ],
+          "response": [
+            {
+              "name": "Exemplo 200",
+              "originalRequest": {
+                "method": "POST",
+                "url": "{{baseUrl}}/api/v1/feedbacks"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Copiloto",
+      "item": [
+        {
+          "name": "Criar chat",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"Análise comercial do cliente\",\n  \"clienteId\": \"{{clienteId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/api/v1/copilot/chats",
+            "description": "Cria chat para o cliente autenticado; salva chatId no environment."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 201\", function () { pm.response.to.have.status(201); });",
+                  "if (pm.response.code >= 200 && pm.response.code < 300) { const d = pm.response.json(); if (d.id) pm.environment.set('chatId', String(d.id)); }"
+                ]
+              }
+            }
+          ],
+          "response": [
+            {
+              "name": "Exemplo 201",
+              "originalRequest": {
+                "method": "POST",
+                "url": "{{baseUrl}}/api/v1/copilot/chats"
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": 55,\n  \"titulo\": \"Análise comercial\",\n  \"clienteId\": 15,\n  \"clienteNome\": \"Empresa Exemplo\",\n  \"criacao\": \"2026-10-13T10:05:00\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Listar chats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/v1/copilot/chats?page={{page}}&size={{copilotPageSize}}",
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ],
+          "response": [
+            {
+              "name": "Exemplo 200",
+              "originalRequest": {
+                "method": "GET",
+                "url": "{{baseUrl}}/api/v1/copilot/chats?page={{page}}&size={{copilotPageSize}}"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"content\": [\n    {\n      \"id\": 55,\n      \"titulo\": \"Análise comercial\",\n      \"clienteId\": 15,\n      \"clienteNome\": \"Empresa Exemplo\",\n      \"criacao\": \"2026-10-13T10:05:00\"\n    }\n  ],\n  \"pageable\": {\n    \"pageNumber\": 0,\n    \"pageSize\": 10,\n    \"sort\": {\n      \"empty\": false,\n      \"sorted\": true,\n      \"unsorted\": false\n    },\n    \"offset\": 0,\n    \"paged\": true,\n    \"unpaged\": false\n  },\n  \"last\": true,\n  \"totalPages\": 1,\n  \"totalElements\": 1,\n  \"size\": 10,\n  \"number\": 0,\n  \"sort\": {\n    \"empty\": false,\n    \"sorted\": true,\n    \"unsorted\": false\n  },\n  \"first\": true,\n  \"numberOfElements\": 1,\n  \"empty\": false\n}"
+            }
+          ]
+        },
+        {
+          "name": "Detalhar chat e histórico",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/v1/copilot/chats/{{chatId}}?page={{page}}&size={{historyPageSize}}",
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ],
+          "response": [
+            {
+              "name": "Exemplo 200",
+              "originalRequest": {
+                "method": "GET",
+                "url": "{{baseUrl}}/api/v1/copilot/chats/{{chatId}}?page={{page}}&size={{historyPageSize}}"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"chat\": {\n    \"id\": 55,\n    \"titulo\": \"Análise comercial\",\n    \"clienteId\": 15,\n    \"clienteNome\": \"Empresa Exemplo\",\n    \"criacao\": \"2026-10-13T10:05:00\"\n  },\n  \"mensagens\": {\n    \"content\": [\n      {\n        \"id\": 80,\n        \"pergunta\": \"Quais riscos foram identificados?\",\n        \"resposta\": \"Resposta fundamentada no contexto disponível.\",\n        \"intencao\": \"CLIENT_RISK\",\n        \"cliente\": {\n          \"id\": 15,\n          \"nome\": \"Empresa Exemplo\"\n        },\n        \"fontes\": [\n          {\n            \"tipo\": \"SINAL_COMERCIAL\",\n            \"id\": 52,\n            \"clienteId\": 15,\n            \"reuniaoId\": 18\n          }\n        ],\n        \"criacao\": \"2026-10-13T10:06:00\"\n      }\n    ],\n    \"pageable\": {\n      \"pageNumber\": 0,\n      \"pageSize\": 10,\n      \"sort\": {\n        \"empty\": false,\n        \"sorted\": true,\n        \"unsorted\": false\n      },\n      \"offset\": 0,\n      \"paged\": true,\n      \"unpaged\": false\n    },\n    \"last\": true,\n    \"totalPages\": 1,\n    \"totalElements\": 1,\n    \"size\": 10,\n    \"number\": 0,\n    \"sort\": {\n      \"empty\": false,\n      \"sorted\": true,\n      \"unsorted\": false\n    },\n    \"first\": true,\n    \"numberOfElements\": 1,\n    \"empty\": false\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Enviar pergunta ao Copiloto",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pergunta\": \"Quais foram os principais riscos identificados nas reuniões desse cliente?\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/api/v1/copilot/chats/{{chatId}}/messages",
+            "description": "Não envie contexto comercial; o backend o recupera."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 201\", function () { pm.response.to.have.status(201); });"
+                ]
+              }
+            }
+          ],
+          "response": [
+            {
+              "name": "Exemplo 201",
+              "originalRequest": {
+                "method": "POST",
+                "url": "{{baseUrl}}/api/v1/copilot/chats/{{chatId}}/messages"
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": 80,\n  \"pergunta\": \"Quais riscos foram identificados?\",\n  \"resposta\": \"Resposta fundamentada no contexto disponível.\",\n  \"intencao\": \"CLIENT_RISK\",\n  \"cliente\": {\n    \"id\": 15,\n    \"nome\": \"Empresa Exemplo\"\n  },\n  \"fontes\": [\n    {\n      \"tipo\": \"SINAL_COMERCIAL\",\n      \"id\": 52,\n      \"clienteId\": 15,\n      \"reuniaoId\": 18\n    }\n  ],\n  \"criacao\": \"2026-10-13T10:06:00\"\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

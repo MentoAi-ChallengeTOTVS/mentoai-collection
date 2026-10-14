@@ -5,7 +5,7 @@ info:
 
 http:
   method: GET
-  url: "{{base_url}}/api/v1/analises/fila"
+  url: "{{baseUrl}}/api/v1/analises/fila"
   auth: inherit
 
 settings:

@@ -5,7 +5,7 @@ info:
 
 http:
   method: GET
-  url: "{{base_url}}/api/v1/reunioes/:id/transcricao"
+  url: "{{baseUrl}}/api/v1/reunioes/:id/transcricao"
   headers:
     - name: Accept
       value: application/json

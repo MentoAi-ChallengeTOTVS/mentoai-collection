@@ -5,7 +5,7 @@ info:
 
 http:
   method: POST
-  url: "{{base_url}}/api/v1/transcricoes/upload"
+  url: "{{baseUrl}}/api/v1/transcricoes/upload"
   body:
     type: multipart-form
     data:

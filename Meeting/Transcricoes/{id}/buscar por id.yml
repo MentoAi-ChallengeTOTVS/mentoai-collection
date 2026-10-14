@@ -5,7 +5,7 @@ info:
 
 http:
   method: GET
-  url: "{{base_url}}/api/v1/transcricoes/:id"
+  url: "{{baseUrl}}/api/v1/transcricoes/:id"
   params:
     - name: id
       value: "1"
